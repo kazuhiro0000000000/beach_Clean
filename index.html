@@ -515,7 +515,7 @@
     ctx.arc(x,y,s*0.5,0,Math.PI*2); ctx.arc(x+s*0.5,y+4,s*0.4,0,Math.PI*2);
     ctx.arc(x-s*0.5,y+4,s*0.38,0,Math.PI*2); ctx.arc(x,y+8,s*0.45,0,Math.PI*2); ctx.fill(); }
 
-  function emoji(txt,x,y,size){ ctx.font=size+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,x,y); }
+  function emoji(txt,x,y,size){ ctx.font=size+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,x,y); }
   function drawPlayerFace(x,y,size){
     if(playerImgEl && playerImgEl.complete && playerImgEl.naturalWidth){
       const r=size*0.6, d=size*1.04;
@@ -566,7 +566,7 @@
     const frac=b.hp/b.maxhp;
     ctx.fillStyle= frac>0.5?'#5fd35f':frac>0.2?'#ffc23d':'#ff5a5a';
     if(hpw>0){ roundRect(bx,by,hpw,bh,5); ctx.fill(); }
-    ctx.fillStyle='#fff'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle='#fff'; ctx.font="bold 12px 'Apple Color Emoji',sans-serif"; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText((b.final?'🦖 ':'')+b.name+'  HP '+Math.max(0,b.hp)+'/'+b.maxhp, cx, by-12);
   }
   function drawSludge(cx,cy,s,hurt,b){
