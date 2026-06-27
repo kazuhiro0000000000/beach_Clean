@@ -269,6 +269,9 @@
   });
 
   const TRASH=['🥫','🧃','🥤','🍾','🥾','🛍️']; // 砂浜・海と同化しにくい、色味のはっきりしたゴミ
+  // スマホ等で絵文字が単色化される環境でも砂と同化しないよう、各ゴミに塗り色を指定（カラー絵文字環境ではこの色は無視される）
+  const TRASH_COLORS=['#d64541','#8e44ad','#e8730c','#1b56b0','#6d4321','#d81b8c'];
+  const FRIEND_COLOR='#149a5a';
   const FRIENDS=['🦀','🐠'];
   const NORMAL_BOSS=[300,500];   // ゴミ大王が出るスコア（2回）
   const FINAL_DELAY=10000;       // 2体目撃破からラスボス登場までの時間(ms)
@@ -326,9 +329,11 @@
   function spawn(){
     const friendChance=0.1+Math.min(score/5000,0.05);
     const isFriend=Math.random()<friendChance;
-    const emoji=isFriend?FRIENDS[(Math.random()*FRIENDS.length)|0]:TRASH[(Math.random()*TRASH.length)|0];
+    let emoji,color;
+    if(isFriend){ emoji=FRIENDS[(Math.random()*FRIENDS.length)|0]; color=FRIEND_COLOR; }
+    else { const ti=(Math.random()*TRASH.length)|0; emoji=TRASH[ti]; color=TRASH_COLORS[ti]; }
     const size=40+Math.random()*8;
-    items.push({ x:size+Math.random()*(W-size*2), y:-size, size, emoji, friend:isFriend,
+    items.push({ x:size+Math.random()*(W-size*2), y:-size, size, emoji, color, friend:isFriend,
       vy:1.0+Math.random()*0.7+Math.min(score/700,1.6),
       sway:Math.random()*Math.PI*2, swaySp:0.02+Math.random()*0.03, swayAmp:16+Math.random()*22,
       rot:(Math.random()-.5)*0.4 });
@@ -650,8 +655,9 @@
         ctx.restore();
       }
       ctx.save(); ctx.translate(ix,it.y); ctx.rotate(Math.sin(it.sway)*0.25+it.rot);
-      // 台は付けず、絵文字に濃いめの影を付けて背景から輪郭を浮かせる
-      ctx.shadowColor='rgba(0,0,0,.55)'; ctx.shadowBlur=4; ctx.shadowOffsetX=1; ctx.shadowOffsetY=2;
+      // 絵文字に濃いめの影＋塗り色を指定。カラー絵文字環境ではそのまま、単色化される環境では塗り色のシルエットになり砂と同化しない
+      ctx.shadowColor='rgba(0,0,0,.5)'; ctx.shadowBlur=4; ctx.shadowOffsetX=1; ctx.shadowOffsetY=2;
+      ctx.fillStyle=it.color||'#444';
       emoji(it.emoji,0,0,it.size);
       ctx.restore(); }
 
